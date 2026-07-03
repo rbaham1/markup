@@ -53,7 +53,7 @@ class _PictureEditScreenState extends State<PictureEditScreen> {
     });
   }
 
-  void addMarkupPoint(DragUpdateDetails details, Paint paintBrush) {
+  void addMarkupPoint(PointerMoveEvent details, Paint paintBrush) {
     setState(() {
       unsavedMarkupPoints.add(
         MarkupPoint(
@@ -64,7 +64,7 @@ class _PictureEditScreenState extends State<PictureEditScreen> {
     });
   }
 
-  void endMarkupLine(DragEndDetails details) {
+  void endMarkupLine(PointerUpEvent event) {
     setState(() {
       unsavedMarkupPoints.add(null);
     });
@@ -84,42 +84,53 @@ class _PictureEditScreenState extends State<PictureEditScreen> {
           SaveButton(onSave: saveMarkup)
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Center(
-          child: Listener(
-            onPointerDown: (_) => setState(() => pointerCount++),
-            onPointerUp: (_) => setState(() => pointerCount--),
-            child: InteractiveViewer(
-              scaleEnabled: pointerCount >= 2,
-              panEnabled: false,
-              child: GestureDetector(
-                onPanStart: (pointerCount == 1
-                  ? (details) => addFirstMarkupPoint(details, paintBrush)
-                  : null
-                ),
-                onPanUpdate: (pointerCount == 1
-                  ? (details) => addMarkupPoint(details, paintBrush)
-                  : null
-                ),
-                onPanEnd: endMarkupLine,
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    widget.picture.image,
-                    Positioned.fill(
-                      child: CustomPaint(
-                        painter: MarkupPainter(
-                          savedMarkupPoints: savedMarkupPoints, 
-                          unsavedMarkupPoints: unsavedMarkupPoints
-                        )
-                      )
-                    )
-                  ],
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              Text(
+                "Pinch to zoom in and out\nDrag with two fingers to pan",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 12,
+                  fontStyle: FontStyle.italic
                 ),
               ),
-            ),
-          )
+              SizedBox(height: 8),
+              Expanded(
+                child: Listener(
+                  onPointerDown: (_) => setState(() => pointerCount++),
+                  onPointerUp: (_) => setState(() => pointerCount--),
+                  child: InteractiveViewer(
+                    scaleEnabled: pointerCount >= 2,
+                    panEnabled: pointerCount >= 2,
+                    child: Listener(
+                      onPointerMove: (pointerCount == 1
+                        ? (event) => addMarkupPoint(event, paintBrush)
+                        : null
+                      ),
+                      onPointerUp: endMarkupLine,
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          widget.picture.image,
+                          Positioned.fill(
+                            child: CustomPaint(
+                              painter: MarkupPainter(
+                                savedMarkupPoints: savedMarkupPoints, 
+                                unsavedMarkupPoints: unsavedMarkupPoints
+                              )
+                            )
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                )
+              ),
+            ],
+          ),
         ),
       ),
       bottomNavigationBar: BottomAppBar(
