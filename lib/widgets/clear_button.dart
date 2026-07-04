@@ -7,7 +7,7 @@ class ClearButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      onPressed: onClear, 
+      onPressed: onClear,
       icon: Icon(Icons.replay)
     );
   }

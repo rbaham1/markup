@@ -11,12 +11,12 @@ class SaveButton extends StatelessWidget {
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           minimumSize: Size.zero,
-          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8), // Removes the default internal spacing around the child
+          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           tapTargetSize: MaterialTapTargetSize.padded,
           foregroundColor: Colors.white,
           backgroundColor: Colors.blue
         ),
-        onPressed: onSave, 
+        onPressed: onSave,
         child: Text('Save')
       ),
     );

@@ -10,12 +10,14 @@ class PictureCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
+
+        // Bring screen up from center of the screen instead of the usual slide transition
         Navigator.push(
           context,
           PageRouteBuilder(
             pageBuilder: (context, animation, secondaryAnimation) => PictureEditScreen(picture: picture),
             transitionsBuilder: (context, animation, secondaryAnimation, child) {
-              // Use Tween to scale from 0.0 (invisible) to 1.0 (full size)
+              // Use Tween to scale transition the screen from invisible to full screen
               var tween = Tween<double>(begin: 0.0, end: 1.0)
                   .chain(CurveTween(curve: Curves.easeInOut));
               
@@ -29,6 +31,8 @@ class PictureCard extends StatelessWidget {
           )
         );
       },
+
+      // Card to display the image title and thumbnail
       child: Card(
         child: ListTile(
           visualDensity: VisualDensity(horizontal: 0, vertical: 4),

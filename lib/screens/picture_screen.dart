@@ -14,6 +14,7 @@ class PictureScreen extends StatelessWidget {
       ),
       body: SafeArea(
         child: Expanded(
+          // List each image 
           child: ListView.builder(
             itemCount: pictures.length,
             itemBuilder: (context, index) {
